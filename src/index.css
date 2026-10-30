@@ -896,17 +896,6 @@ button:hover .roll__in {
   margin-top: 0.85rem;
   color: var(--fg-3);
 }
-.about__portrait-edit {
-  color: var(--fg-2);
-  text-decoration: underline;
-  text-underline-offset: 4px;
-  text-decoration-color: var(--line-2);
-  transition: color 0.3s, text-decoration-color 0.3s;
-}
-.about__portrait-edit:hover {
-  color: var(--accent);
-  text-decoration-color: var(--accent);
-}
 
 .portrait-plate {
   width: 100%;
@@ -1946,17 +1935,6 @@ button:hover .roll__in {
   gap: 0.6rem;
   margin-top: 0.2rem;
 }
-.ig-edit-trigger {
-  font-family: var(--f-mono);
-  font-size: 0.68rem;
-  text-transform: uppercase;
-  color: var(--fg-3);
-  text-decoration: underline;
-  text-underline-offset: 3px;
-}
-.ig-edit-trigger:hover {
-  color: var(--accent);
-}
 
 .cta-orb {
   grid-column: 11 / span 2;
@@ -2199,7 +2177,7 @@ button:hover .roll__in {
   caret-color: var(--accent);
 }
 
-/* ─── Editorial Modals (Project Detail & Customizer) ───── */
+/* ─── Editorial Modal (Project Detail) ──────────────────── */
 .modal-backdrop {
   position: fixed;
   inset: 0;

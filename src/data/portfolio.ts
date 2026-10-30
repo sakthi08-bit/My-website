@@ -29,22 +29,6 @@ export interface SkillCategory {
   items: string[];
 }
 
-export interface EditableProfileOverrides {
-  instagramId: string;
-  instagramCustomUrl: string;
-  locationLabel: string;
-  portraitUrl: string;
-  educationNote: string;
-}
-
-export const DEFAULT_EDITABLE_PROFILE: EditableProfileOverrides = {
-  instagramId: '_.sakthyyy._08._',
-  instagramCustomUrl: '',
-  locationLabel: 'India',
-  portraitUrl: '',
-  educationNote: 'Self-directed Computer Science, Cybersecurity & Embedded Systems',
-};
-
 /**
  * Validates whether a supplied Instagram display ID conforms to Instagram's
  * strict handle syntax:
@@ -102,6 +86,11 @@ export const PORTFOLIO_DATA = {
     { text: 'Workflow Automation', italic: false },
     { text: 'Digital Experiences', italic: true },
   ],
+  profile: {
+    locationLabel: 'India',
+    portraitUrl: '',
+    educationNote: 'Self-directed Computer Science, Cybersecurity & Embedded Systems',
+  },
   contact: {
     email: 'sakthisd.tech@gmail.com',
     whatsappDisplay: '+91 9791226279',
@@ -109,6 +98,9 @@ export const PORTFOLIO_DATA = {
     whatsappUrl: 'https://wa.me/919791226279',
     githubUrl: 'https://github.com/sakthi08-bit',
     githubHandle: 'sakthi08-bit',
+    // Update instagramId in source code only (read-only on the live website)
+    instagramId: '_.sakthyyy._08._',
+    instagramCustomUrl: '',
   },
   about: {
     statementPrefix: 'I build software, automation scripts, and security tools where ',

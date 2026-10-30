@@ -16,7 +16,7 @@ Showcasing software engineering builds, Python & Bash security tooling, embedded
 - **Motion & Smooth Scrolling** — Powered by **GSAP**, **ScrollTrigger**, and **Lenis** smooth scroll with character/word split reveals, scroll-scrubbed statement fill, velocity-reactive marquee, and pinned horizontal project gallery.
 - **Interactive Hero Canvas** — Real-time HTML5 `<canvas>` wavelet dot-matrix background reactive to pointer movement.
 - **Preloader & Custom Cursor** — `0–100` tabular loading sequence and responsive desktop magnetic cursor with contextual action labels.
-- **Interactive Terminal (`~ $`)** — Press `` ` `` (backtick) anywhere on the site to open a built-in command-line drawer (`help`, `whoami`, `projects`, `skills`, `experience`, `contact`, `socials`, `edit`).
+- **Interactive Terminal (`~ $`)** — Press `` ` `` (backtick) anywhere on the site to open a built-in command-line drawer (`help`, `whoami`, `projects`, `skills`, `experience`, `contact`, `socials`).
 - **Accessibility First** — Semantic HTML, keyboard navigation, high-contrast focus states, and full `prefers-reduced-motion` support.
 
 ---
@@ -24,7 +24,7 @@ Showcasing software engineering builds, Python & Bash security tooling, embedded
 ## 📂 Website Sections
 
 1. **Hero** — Oversized editorial typography, live IST clock, rotating focus roles, and interactive dot-matrix canvas.
-2. **About** — Personal introduction, sticky portrait frame (with customizable photo/monogram plate), core facts, and key metrics.
+2. **About** — Personal introduction, sticky portrait frame (with architectural monogram plate), core facts, and key metrics.
 3. **Experience & Learning Journey** — Expandable accordion detailing hands-on progress across Cybersecurity/CTFs, Embedded Systems (`C/C++`), and Python Automation.
 4. **Selected Projects** — Featured *NetRecon Suite* live topology mockup alongside a horizontal scroll-pinned showcase (*Network Scanner*, *Web Vuln Scanner*, *Password Auditor*, *WiFi Monitor Utility*) with inspectable project modals.
 5. **Skills & Arsenal** — Structured breakdown of programming languages, security domains, offensive/defensive tools, embedded systems, and platforms.

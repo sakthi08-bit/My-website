@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { EditableProfileOverrides, PORTFOLIO_DATA, resolveInstagramHref } from '../data/portfolio';
+import { PORTFOLIO_DATA, resolveInstagramHref } from '../data/portfolio';
 
 interface TerminalLine {
   id: number;
@@ -10,15 +10,11 @@ interface TerminalLine {
 interface TerminalDrawerProps {
   isOpen: boolean;
   onClose: () => void;
-  onOpenCustomizer: () => void;
-  profile: EditableProfileOverrides;
 }
 
 export function TerminalDrawer({
   isOpen,
   onClose,
-  onOpenCustomizer,
-  profile,
 }: TerminalDrawerProps) {
   const [lines, setLines] = useState<TerminalLine[]>([
     { id: 1, text: 'Type "help" to see available commands.' },
@@ -75,16 +71,11 @@ export function TerminalDrawer({
       onClose();
       return;
     }
-    if (cmd === 'edit' || cmd === 'customize') {
-      appendLines([
-        { text: `~ $ ${raw}`, tone: 'cmd' },
-        { text: '  Opening profile & contact customizer...', tone: 'acc' },
-      ]);
-      onOpenCustomizer();
-      return;
-    }
 
-    const igHref = resolveInstagramHref(profile.instagramId, profile.instagramCustomUrl);
+    const igHref = resolveInstagramHref(
+      PORTFOLIO_DATA.contact.instagramId,
+      PORTFOLIO_DATA.contact.instagramCustomUrl
+    );
 
     const commandMap: Record<string, Array<{ text: string; tone?: 'acc' | 'cmd' | 'err' }>> = {
       help: [
@@ -95,7 +86,6 @@ export function TerminalDrawer({
         { text: '  experience   learning & development journey' },
         { text: '  contact      direct email & WhatsApp details' },
         { text: '  socials      GitHub & social handles' },
-        { text: '  edit         customize editable profile details' },
         { text: '  clear        clear terminal output' },
         { text: '  exit         close terminal' },
       ],
@@ -103,7 +93,7 @@ export function TerminalDrawer({
         { text: `  ${PORTFOLIO_DATA.fullName}`, tone: 'acc' },
         { text: `  ${PORTFOLIO_DATA.identityLine}` },
         { text: `  "${PORTFOLIO_DATA.headline}"` },
-        { text: `  Location: ${profile.locationLabel}` },
+        { text: `  Location: ${PORTFOLIO_DATA.profile.locationLabel}` },
       ],
       projects: [
         { text: '  Selected builds:', tone: 'acc' },
@@ -137,7 +127,7 @@ export function TerminalDrawer({
         { text: `  GitHub      ${PORTFOLIO_DATA.contact.githubUrl}` },
         { text: `  WhatsApp    ${PORTFOLIO_DATA.contact.whatsappUrl}` },
         {
-          text: `  Instagram   ${profile.instagramId}${igHref ? ` (${igHref})` : ' (display ID)'}`,
+          text: `  Instagram   ${PORTFOLIO_DATA.contact.instagramId}${igHref ? ` (${igHref})` : ' (display ID)'}`,
         },
       ],
     };

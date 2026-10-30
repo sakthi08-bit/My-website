@@ -3,8 +3,6 @@ import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import Lenis from 'lenis';
 import {
-  DEFAULT_EDITABLE_PROFILE,
-  EditableProfileOverrides,
   PORTFOLIO_DATA,
   ProjectItem,
   resolveInstagramHref,
@@ -12,12 +10,10 @@ import {
 import { HeroCanvas } from './components/HeroCanvas';
 import { PortraitFrame, ProjectArt } from './components/ProjectArt';
 import { TerminalDrawer } from './components/TerminalDrawer';
-import { ProfileCustomizerModal } from './components/ProfileCustomizerModal';
 import { ProjectModal } from './components/ProjectModal';
 
 gsap.registerPlugin(ScrollTrigger);
 
-const STORAGE_KEY = 'sk_portfolio_profile_v1';
 const INTRO_SEEN_KEY = 'sk_portfolio_intro_seen_v1';
 const GLYPHS = '!/\\_-=+*^?#[]{}ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
 
@@ -150,19 +146,6 @@ export default function App() {
     }
   });
 
-  const [profile, setProfile] = useState<EditableProfileOverrides>(() => {
-    if (typeof window === 'undefined') return DEFAULT_EDITABLE_PROFILE;
-    try {
-      const saved = localStorage.getItem(STORAGE_KEY);
-      if (saved) {
-        return { ...DEFAULT_EDITABLE_PROFILE, ...JSON.parse(saved) };
-      }
-    } catch {
-      // ignore storage errors
-    }
-    return DEFAULT_EDITABLE_PROFILE;
-  });
-
   const [menuOpen, setMenuOpen] = useState(false);
   const [navScrolled, setNavScrolled] = useState(false);
   const [navHidden, setNavHidden] = useState(false);
@@ -176,7 +159,6 @@ export default function App() {
   const [emailCopied, setEmailCopied] = useState(false);
   const [igCopied, setIgCopied] = useState(false);
   const [terminalOpen, setTerminalOpen] = useState(false);
-  const [customizerOpen, setCustomizerOpen] = useState(false);
   const [selectedProject, setSelectedProject] = useState<ProjectItem | null>(null);
 
   // Direct honest message composer state
@@ -204,18 +186,13 @@ export default function App() {
   const cursorLabelRef = useRef<HTMLSpanElement | null>(null);
   const lenisRef = useRef<Lenis | null>(null);
 
-  const handleSaveProfile = useCallback((updated: EditableProfileOverrides) => {
-    setProfile(updated);
-    try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
-    } catch {
-      // ignore storage errors
-    }
-  }, []);
-
   const instagramHref = useMemo(
-    () => resolveInstagramHref(profile.instagramId, profile.instagramCustomUrl),
-    [profile.instagramId, profile.instagramCustomUrl]
+    () =>
+      resolveInstagramHref(
+        PORTFOLIO_DATA.contact.instagramId,
+        PORTFOLIO_DATA.contact.instagramCustomUrl
+      ),
+    []
   );
 
   // Compose mailto and WhatsApp URLs dynamically from honest form inputs
@@ -287,12 +264,12 @@ export default function App() {
   useEffect(() => {
     const root = document.documentElement;
     root.classList.toggle('menu-open', menuOpen);
-    const shouldPauseScroll = menuOpen || Boolean(selectedProject) || customizerOpen;
+    const shouldPauseScroll = menuOpen || Boolean(selectedProject);
     if (lenisRef.current) {
       if (shouldPauseScroll) lenisRef.current.stop();
       else lenisRef.current.start();
     }
-  }, [menuOpen, selectedProject, customizerOpen]);
+  }, [menuOpen, selectedProject]);
 
   // Global keyboard shortcuts (` for terminal, Escape for mobile menu)
   useEffect(() => {
@@ -856,7 +833,7 @@ export default function App() {
 
   const handleCopyInstagramId = () => {
     if (!navigator.clipboard) return;
-    navigator.clipboard.writeText(profile.instagramId).then(() => {
+    navigator.clipboard.writeText(PORTFOLIO_DATA.contact.instagramId).then(() => {
       setIgCopied(true);
       window.setTimeout(() => setIgCopied(false), 2200);
     });
@@ -873,7 +850,7 @@ export default function App() {
         <div className="loader" id="loader" ref={loaderRef} aria-hidden="true">
           <div className="loader__row">
             <span className="mono">{PORTFOLIO_DATA.fullName}</span>
-            <span className="mono">Portfolio — {profile.locationLabel}</span>
+            <span className="mono">Portfolio — {PORTFOLIO_DATA.profile.locationLabel}</span>
           </div>
           <div className="loader__row loader__row--bottom">
             <span className="loader__word" ref={loaderWordRef}>
@@ -1025,11 +1002,11 @@ export default function App() {
             </a>
             {instagramHref ? (
               <a href={instagramHref} target="_blank" rel="noopener noreferrer">
-                Instagram ({profile.instagramId})
+                Instagram ({PORTFOLIO_DATA.contact.instagramId})
               </a>
             ) : (
               <button type="button" onClick={handleCopyInstagramId}>
-                {igCopied ? 'Copied ID ✓' : `IG: ${profile.instagramId}`}
+                {igCopied ? 'Copied ID ✓' : `IG: ${PORTFOLIO_DATA.contact.instagramId}`}
               </button>
             )}
           </div>
@@ -1044,7 +1021,7 @@ export default function App() {
           <div className="hero__meta wrap" data-hero="">
             <span className="mono">({PORTFOLIO_DATA.identityLine})</span>
             <span className="mono hero__coords">
-              {profile.locationLabel} · {clockText} IST
+              {PORTFOLIO_DATA.profile.locationLabel} · {clockText} IST
             </span>
           </div>
 
@@ -1133,20 +1110,13 @@ export default function App() {
               <figure className="about__portrait">
                 <div className="about__portrait-inner">
                   <PortraitFrame
-                    portraitUrl={profile.portraitUrl}
+                    portraitUrl={PORTFOLIO_DATA.profile.portraitUrl}
                     fullName={PORTFOLIO_DATA.fullName}
                   />
                 </div>
                 <figcaption className="about__portrait-caption mono">
-                  <span>Sakthi Kumaran</span>
-                  <button
-                    type="button"
-                    className="about__portrait-edit mono"
-                    onClick={() => setCustomizerOpen(true)}
-                    data-cursor="Edit"
-                  >
-                    Customize details
-                  </button>
+                  <span>{PORTFOLIO_DATA.fullName}</span>
+                  <span>{PORTFOLIO_DATA.profile.locationLabel}</span>
                 </figcaption>
               </figure>
 
@@ -1172,11 +1142,11 @@ export default function App() {
                   </div>
                   <div>
                     <dt className="mono">Location</dt>
-                    <dd>{profile.locationLabel}</dd>
+                    <dd>{PORTFOLIO_DATA.profile.locationLabel}</dd>
                   </div>
                   <div>
                     <dt className="mono">Learning Focus</dt>
-                    <dd>{profile.educationNote}</dd>
+                    <dd>{PORTFOLIO_DATA.profile.educationNote}</dd>
                   </div>
                   <div>
                     <dt className="mono">Core Stack</dt>
@@ -1794,7 +1764,7 @@ export default function App() {
                     <div className="ig-inline-row">
                       {instagramHref ? (
                         <a href={instagramHref} target="_blank" rel="noopener noreferrer">
-                          {profile.instagramId} ↗
+                          {PORTFOLIO_DATA.contact.instagramId} ↗
                         </a>
                       ) : (
                         <button
@@ -1802,16 +1772,11 @@ export default function App() {
                           onClick={handleCopyInstagramId}
                           className="text-left text-[var(--fg-2)] hover:text-[var(--fg)]"
                         >
-                          {igCopied ? `${profile.instagramId} (Copied ✓)` : profile.instagramId}
+                          {igCopied
+                            ? `${PORTFOLIO_DATA.contact.instagramId} (Copied ✓)`
+                            : PORTFOLIO_DATA.contact.instagramId}
                         </button>
                       )}
-                      <button
-                        type="button"
-                        className="ig-edit-trigger"
-                        onClick={() => setCustomizerOpen(true)}
-                      >
-                        Edit ID
-                      </button>
                     </div>
                   </div>
                 </div>
@@ -1874,7 +1839,7 @@ export default function App() {
                   rel="noopener noreferrer"
                   className="socials__item"
                 >
-                  <RollText>{`Instagram · ${profile.instagramId}`}</RollText>
+                  <RollText>{`Instagram · ${PORTFOLIO_DATA.contact.instagramId}`}</RollText>
                   <span className="socials__arrow" aria-hidden="true">
                     ↗
                   </span>
@@ -1887,7 +1852,9 @@ export default function App() {
                   data-cursor="Copy"
                 >
                   <RollText>
-                    {igCopied ? 'Copied Instagram ID ✓' : `Instagram · ${profile.instagramId}`}
+                    {igCopied
+                      ? 'Copied Instagram ID ✓'
+                      : `Instagram · ${PORTFOLIO_DATA.contact.instagramId}`}
                   </RollText>
                   <span className="socials__arrow" aria-hidden="true">
                     ⎘
@@ -1905,7 +1872,7 @@ export default function App() {
           <p className="footer__quote">“{PORTFOLIO_DATA.quote}”</p>
 
           <div className="footer__col mono">
-            <span>Local time · {profile.locationLabel}</span>
+            <span>Local time · {PORTFOLIO_DATA.profile.locationLabel}</span>
             <span className="text-[var(--fg)]">{clockText} IST</span>
             <a href={`mailto:${PORTFOLIO_DATA.contact.email}`} className="footer__mail">
               {PORTFOLIO_DATA.contact.email}
@@ -1919,13 +1886,6 @@ export default function App() {
               onClick={() => setTerminalOpen((prev) => !prev)}
             >
               <RollText>Open terminal</RollText> <kbd>`</kbd>
-            </button>
-            <button
-              type="button"
-              className="footer__btn"
-              onClick={() => setCustomizerOpen(true)}
-            >
-              <RollText>Edit details</RollText>
             </button>
             <a
               href="#top"
@@ -1953,22 +1913,10 @@ export default function App() {
         </div>
       </footer>
 
-      {/* ═══ Interactive Terminal & Modals ═══ */}
+      {/* ═══ Interactive Terminal & Project Modal ═══ */}
       <TerminalDrawer
         isOpen={terminalOpen}
         onClose={() => setTerminalOpen(false)}
-        onOpenCustomizer={() => {
-          setTerminalOpen(false);
-          setCustomizerOpen(true);
-        }}
-        profile={profile}
-      />
-
-      <ProfileCustomizerModal
-        isOpen={customizerOpen}
-        onClose={() => setCustomizerOpen(false)}
-        profile={profile}
-        onSave={handleSaveProfile}
       />
 
       <ProjectModal
