@@ -70,16 +70,27 @@ interface PortraitFrameProps {
 }
 
 export function PortraitFrame({ portraitUrl, fullName }: PortraitFrameProps) {
+  const [fallbackRoot, setFallbackRoot] = useState(false);
   const [imgError, setImgError] = useState(false);
-  const showImage = Boolean(portraitUrl && !imgError);
 
-  if (showImage) {
+  const resolvedSrc =
+    fallbackRoot && portraitUrl.startsWith('./')
+      ? portraitUrl.slice(1)
+      : portraitUrl;
+
+  if (resolvedSrc && !imgError) {
     return (
       <img
-        src={portraitUrl}
-        alt={`Portrait of ${fullName}`}
-        referrerPolicy="no-referrer"
-        onError={() => setImgError(true)}
+        src={resolvedSrc}
+        alt={`${fullName} — Portrait`}
+        decoding="async"
+        onError={() => {
+          if (!fallbackRoot && portraitUrl.startsWith('./')) {
+            setFallbackRoot(true);
+          } else {
+            setImgError(true);
+          }
+        }}
       />
     );
   }

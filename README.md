@@ -24,7 +24,7 @@ Showcasing software engineering builds, Python & Bash security tooling, embedded
 ## 📂 Website Sections
 
 1. **Hero** — Oversized editorial typography, live IST clock, rotating focus roles, and interactive dot-matrix canvas.
-2. **About** — Personal introduction, sticky portrait frame (with architectural monogram plate), core facts, and key metrics.
+2. **About** — Personal introduction, sticky portrait frame, core facts, and key metrics.
 3. **Experience & Learning Journey** — Expandable accordion detailing hands-on progress across Cybersecurity/CTFs, Embedded Systems (`C/C++`), and Python Automation.
 4. **Selected Projects** — Featured *NetRecon Suite* live topology mockup alongside a horizontal scroll-pinned showcase (*Network Scanner*, *Web Vuln Scanner*, *Password Auditor*, *WiFi Monitor Utility*) with inspectable project modals.
 5. **Skills & Arsenal** — Structured breakdown of programming languages, security domains, offensive/defensive tools, embedded systems, and platforms.

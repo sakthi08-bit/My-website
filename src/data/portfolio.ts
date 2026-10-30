@@ -88,7 +88,8 @@ export const PORTFOLIO_DATA = {
   ],
   profile: {
     locationLabel: 'India',
-    portraitUrl: '',
+    // Update portraitUrl in source code only (read-only on the live website)
+    portraitUrl: './assets/aistudio/Spidey_Saves_the_Day_Selfie_e9709cba.png',
     educationNote: 'Self-directed Computer Science, Cybersecurity & Embedded Systems',
   },
   contact: {
